@@ -1,0 +1,5 @@
+criterion,weight,description
+market_reach,35,"Estimated monthly visits, converted to a five-point band."
+institution_coverage,30,Number of distinct financial institutions observed on the platform.
+product_breadth,25,Number of distinct financial product types observed.
+evidence_completeness,10,Share of observation records with both a source and an observation date.
