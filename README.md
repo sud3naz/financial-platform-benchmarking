@@ -4,6 +4,8 @@ A reproducible map of Turkey's financial-platform market, supported by a separat
 
 This independent portfolio project contains no confidential employer information and does not recommend any company, credit product, investment, or commercial partnership.
 
+> **Interpretation notice:** This is an exploratory portfolio analysis based on public information collected on the recorded observation dates. Scores describe only the observed institution/brand coverage, product breadth, and source diversity within each market segment. They do not measure overall platform quality, reliability, pricing, user experience, commercial performance, or creditworthiness, and should not be interpreted as an official market ranking or as a financial, product, or partnership recommendation.
+
 ## Portfolio summary
 
 - **Problem:** Compare heterogeneous financial-product platforms with consistent, explainable criteria while keeping missing evidence visible.
