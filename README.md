@@ -1,35 +1,42 @@
 # Financial Platform Benchmarking
 
-A reproducible market-mapping project for comparing financial-product platforms across market reach, institution coverage, product breadth, and evidence quality.
+A reproducible map of Turkey's financial-platform market, supported by a separate international benchmark set and built from public, date-limited observations. The project compares eligible Turkish platforms only with local peers in the same market segment; it is not a definitive "best platform" list and does not publish a global ranking.
 
-The project was independently developed from publicly available website observations. It is a public portfolio reconstruction and does not contain confidential employer information or recommendations for a specific company.
+This independent portfolio project contains no confidential employer information and does not recommend any company, credit product, investment, or commercial partnership.
 
 ## Portfolio summary
 
-- **Problem:** Compare financial-product platforms with consistent, explainable criteria despite differences in business model and data availability.
-- **My contribution:** Designed the data structure, standardized 914 public-source observations, built the scoring and validation pipeline, and produced analysis-ready outputs and visuals.
-- **Tools:** Python, pandas, Matplotlib, CSV, unittest, and Git.
-- **Deliverable:** A company-neutral, reproducible repository that keeps missing evidence visible and documents every scoring assumption.
+- **Problem:** Compare heterogeneous financial-product platforms with consistent, explainable criteria while keeping missing evidence visible.
+- **My contribution:** Designed the data model, standardized 914 public-source observations, built the scoring and validation pipeline, and produced reproducible outputs and visuals.
+- **Tools:** Python, pandas, Pillow, CSV, `unittest`, Git, and GitHub Actions.
+- **Deliverable:** A company-neutral Turkish-market map with documented assumptions, segment-level ranks, and automated release checks.
 
 ## Dataset at a glance
 
-- **106** platforms in the market inventory
+- **106** platforms in the inventory: **91** from Türkiye and **15** international benchmarks
 - **914** platform-product-institution observations
-- **37** platform reach records
-- **181** public source links
+- **181** source records representing **166** normalized unique URLs in `data/sources.csv`
+- **37** supplementary market-reach records
 - **7** in-scope market segments
 
-## Project overview
+## Key findings
 
-The dataset maps financial comparison platforms, marketplace finance products, card-campaign aggregators, deposit and participation-account tools, insurance platforms, and selected e-commerce finance ecosystems.
+- In the current data snapshot, **106** platforms are mapped: **91** are from Türkiye and **15** are retained separately as `international_benchmark` records.
+- Among the Turkish platforms, **56** fall within the seven scoring segments and **35** are retained with `out_of_scope` status.
+- The generated `outputs/platform_scores.csv` marks **51** Turkish platforms as `ranked`: each is in scope and has both usable product observations and at least one distinct public source. The remaining **5** in-scope Turkish platforms currently have `needs_product_data` status and stay visible rather than receiving a zero.
+- Coverage is uneven across segments, so comparisons are made within a segment only. A single cross-market league table would mix materially different business models.
+- Market-reach estimates are retained as supplementary, experimental context. They do not affect scores or eligibility.
 
-The pipeline:
+These counts describe the committed public-data snapshot, not a permanent market total. Re-running the pipeline updates the generated CSV outputs when the underlying data changes; those outputs are the authoritative source for ranked counts and segment coverage.
 
-1. standardizes platform and product observations;
-2. aggregates institution and product coverage;
-3. applies a transparent four-criterion scoring model;
-4. ranks comparable platforms within their market segment;
-5. exports analysis-ready CSV files and portfolio visuals.
+## How the pipeline works
+
+1. Standardize platform, product, institution, and source observations.
+2. Aggregate distinct institution, product, and public-source counts by platform.
+3. Apply the documented three-criterion scoring model.
+4. Assign ranks only among eligible platforms in the same market segment.
+5. Export analysis-ready CSV files and portfolio visuals.
+6. Validate data contracts, release safety, tests, and reproducibility in CI.
 
 ## Skills demonstrated
 
@@ -41,29 +48,42 @@ The pipeline:
 
 ## Visual outputs
 
-![Top platform scores](outputs/top_platform_scores.png)
+![Credit-comparison segment scores](outputs/credit_comparison_scores.png)
 
-![Segment coverage](outputs/segment_coverage.png)
+The credit-comparison chart shows only eligible platforms in that segment; it is not a global ranking.
+
+![Coverage by market segment](outputs/segment_coverage.png)
+
+The coverage chart contrasts the Turkish in-scope inventory with the number of local platforms that currently meet the scoring requirements in each segment. International benchmarks are excluded from these denominators.
 
 ## Scoring model
 
 | Criterion | Weight | What it measures |
 | --- | ---: | --- |
-| Market reach | 35% | Estimated monthly visits converted to a five-point band |
-| Institution coverage | 30% | Distinct financial institutions observed |
-| Product breadth | 25% | Distinct product types observed |
-| Evidence completeness | 10% | Records supported by both a source and observation date |
+| Institution/brand coverage | 45% | Distinct institution or financial-brand labels observed for the platform |
+| Product breadth | 35% | Distinct financial product types observed |
+| Source diversity | 20% | Distinct valid public-source URLs across the observation and source tables |
 
-Scores range from 1 to 5. A platform is ranked only when it has a measurable reach value and at least one usable product observation. Missing data remains visible instead of being converted to zero.
+Each component is converted to a 1-5 score and combined as:
+
+```text
+0.45 × institution coverage
++ 0.35 × product breadth
++ 0.20 × source diversity
+```
+
+A platform is ranked only when it is from Türkiye, belongs to an in-scope segment, has at least one usable product observation, and has at least one valid public source. `segment_rank` is calculated within its segment; there is no global rank. Missing product or source evidence and international comparators are represented by explicit `ranking_status` values.
+
+Market-reach fields remain in the project for exploratory context, but their estimates are directional, date-dependent, and excluded from the scoring formula.
 
 ## Repository structure
 
 ```text
 data/       Public-source, company-neutral CSV datasets
 docs/       Methodology and field definitions
-outputs/    Generated rankings, summaries, and charts
+outputs/    Generated segment scores, summaries, and charts
 src/        Reproducible scoring, visualization, and validation code
-tests/      Boundary tests for the scoring functions
+tests/      Boundary and pipeline tests
 ```
 
 ## Run locally
@@ -75,15 +95,18 @@ pip install -r requirements.txt
 python src/score_platforms.py
 python src/create_visuals.py
 python src/validate_public_release.py
-python -m unittest discover -s tests
+python -m unittest discover -s tests -v
 ```
 
 ## Data provenance and limitations
 
-- Records were collected from publicly accessible platform pages and supporting public web sources.
-- Traffic values are estimates tied to the date shown in `data/reach_metrics.csv`; they are not audited figures.
-- A platform can change its product or institution coverage after the observation date.
-- Rankings are meaningful within the model's stated scope and should not be interpreted as investment, credit, or partnership advice.
+- Records were collected from publicly accessible platform pages and supporting public web sources on the dates recorded in the dataset.
+- Public pages, product ranges, institution coverage, and URLs can change after an observation date.
+- Market-reach values are unaudited, experimental estimates and are not used in scoring.
+- A listing does not prove an active commercial integration, availability to every user, conversion performance, or product quality.
+- Institution coverage counts observed public labels; a bank and its separately branded digital proposition may therefore appear as distinct labels.
+- More distinct URLs improve source diversity under this model, but do not by themselves guarantee source quality or independence.
+- Results are a reproducible market-mapping snapshot, not financial, credit, investment, or partnership advice.
 - The MIT License applies to the repository's code. Third-party facts and source materials remain subject to their original terms.
 
-See [methodology](docs/methodology.md) for thresholds and [data dictionary](docs/data_dictionary.md) for field-level definitions.
+See the [methodology](docs/methodology.md) for eligibility and score thresholds, and the [data dictionary](docs/data_dictionary.md) for field-level definitions.
