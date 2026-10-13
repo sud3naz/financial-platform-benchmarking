@@ -1,0 +1,26 @@
+{
+  "charts": {
+    "credit_comparison_scores.png": {
+      "maximum_rows_shown": 15,
+      "ranked_rows": 15,
+      "size": [
+        1600,
+        1080
+      ],
+      "target_segment": "1 Kredi karşılaştırma"
+    },
+    "segment_coverage.png": {
+      "segments": 7,
+      "size": [
+        1600,
+        960
+      ]
+    }
+  },
+  "inputs": {
+    "platform_scores.csv": "48a90d6ce902179608c098f29a4e0591250a6897d0c878c898ab24c2b006d858",
+    "segment_summary.csv": "cbdf3ec20ab187f292f6c6013ee743f7b0cedfad8d0ac61ee03c2a9114d4d0b7"
+  },
+  "manifest_version": 1,
+  "renderer_source_sha256": "9dd510cfa8d591fc9fb3bc7005352c94f4d415571faa4289931477c6412c1f25"
+}
